@@ -1,0 +1,44 @@
+[Unit]
+Description=dufs - lightweight file server (upload/download/WebDAV) (TOS)
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+User=dufs
+Group=dufs
+EnvironmentFile=/etc/dufs/dufs.env
+WorkingDirectory=/var/lib/dufs
+# DUFS_SERVE_ROOT is the shared folder; DUFS_AUTH enables basic auth
+# (--allow-all gives upload/delete/write permissions to authenticated users)
+ExecStart=/usr/local/dufs/bin/dufs --port ${DUFS_PORT} ${DUFS_AUTH} --allow-all --serve-path ${DUFS_SERVE_ROOT}
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+# Security hardening (TOS 7 review requires NoNewPrivileges/ProtectSystem/ProtectHome;
+# Restart= is intentionally omitted — service lifecycle is managed by the platform)
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+MemoryDenyWriteExecute=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+SystemCallArchitectures=native
+
+# the shared folder must be writable (upload/delete via web UI / WebDAV);
+# default serve root /Volume1/public (prefix "-" tolerates a missing path);
+# if you change DUFS_SERVE_ROOT in /etc/dufs/dufs.env, add it here too
+ReadWritePaths=-/Volume1/public /var/lib/dufs
+
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

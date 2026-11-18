@@ -1,0 +1,49 @@
+#!/bin/bash
+# Post-installation script — runs after the package is installed
+set -e
+
+APPID="dufs"
+APP_DIR="/usr/local/${APPID}"
+
+if ! id -u "${APPID}" > /dev/null 2>&1; then
+    useradd --system --no-create-home --shell /usr/sbin/nologin "${APPID}" 2>/dev/null || true
+fi
+
+chown -R "${APPID}:${APPID}" "${APP_DIR}" 2>/dev/null || true
+
+# Share root + data dir
+mkdir -p /var/lib/dufs 2>/dev/null || true
+chown -R "${APPID}:${APPID}" /var/lib/dufs 2>/dev/null || true
+
+# Env seed: web port + share root + basic-auth credential generated once
+mkdir -p /etc/dufs 2>/dev/null || true
+if [ ! -f /etc/dufs/dufs.env ]; then
+    SHARE="$(grep -oE '/Volume[0-9]+/[A-Za-z0-9_-]+' /etc/ustor/shares.conf 2>/dev/null | head -1)"
+    [ -n "${SHARE}" ] || SHARE="/Volume1/public"
+    mkdir -p "${SHARE}" 2>/dev/null || true
+    AUTH="$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 16)"
+    [ -n "${AUTH}" ] || AUTH="dufs-$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')"
+    cat > /etc/dufs/dufs.env <<ENVEOF
+DUFS_PORT=18240
+DUFS_SERVE_ROOT=${SHARE}
+DUFS_AUTH=-a dufs:${AUTH}
+ENVEOF
+    chmod 640 /etc/dufs/dufs.env
+    echo "dufs: web credential dufs:${AUTH}  share root: ${SHARE}"
+fi
+
+case "$1" in
+    configure)
+        if [ -n "$2" ]; then
+            echo "${APPID}: upgrading from version $2 (env in /etc/dufs preserved)"
+        fi
+        systemctl daemon-reload 2>/dev/null || true
+        systemctl enable "dufs.service" 2>/dev/null || true
+        systemctl start "dufs.service" 2>/dev/null || true
+        ;;
+    *) ;;
+esac
+
+echo "${APPID} installed successfully."
+echo "  web UI: http://<NAS>:18240 (basic auth dufs / <password in /etc/dufs/dufs.env>)"
+exit 0

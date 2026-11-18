@@ -1,0 +1,15 @@
+This product (TOS App Center packaging of dufs) includes software developed
+by the dufs project:
+
+  dufs - A distinctive utility file server
+  https://github.com/sigoden/dufs
+  Copyright sigoden and dufs contributors
+  Licensed under the Apache License 2.0 and MIT (dual license, user may
+  choose either; this package distributes the Apache-2.0 text as primary
+  with the MIT text alongside — see LICENSE and LICENSE-MIT)
+
+The packaged binary is the unmodified release artifact published in the
+upstream project's GitHub Releases; its SHA256 is pinned in the UPSTREAM
+file of this repository. The TOS packaging metadata, build scripts, systemd
+unit, env seed and documentation in this repository are original work by
+ericbyz, licensed under the MIT License.

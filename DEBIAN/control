@@ -1,0 +1,16 @@
+Package: dufs
+Version: 0.47.0
+Architecture: amd64
+Section: net
+Priority: optional
+Maintainer: ericbyz <ericbyz@users.noreply.github.com>
+Depends: systemd
+Description: Lightweight file server with web UI and WebDAV (dufs)
+ dufs is a distinctive utility file server: browse, upload, download, edit
+ and share files from the NAS shared folder in any browser, with resume
+ support and the WebDAV protocol for apps. Single musl static binary, zero
+ dependencies. Web UI at http://<NAS>:18240 (basic auth credential
+ generated at install, stored in /etc/dufs/dufs.env); serve root defaults
+ to /Volume1/public.
+ Upstream project: https://github.com/sigoden/dufs (Apache-2.0/MIT),
+ packaged unmodified.

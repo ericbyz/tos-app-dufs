@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+APPID="dufs"
+case "$1" in
+    remove|deconfigure)
+        systemctl stop "dufs.service" 2>/dev/null || true
+        systemctl disable "dufs.service" 2>/dev/null || true
+        ;;
+    upgrade|failed-upgrade) ;;
+    *) ;;
+esac
+exit 0
