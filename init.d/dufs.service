@@ -13,7 +13,7 @@ WorkingDirectory=/var/lib/dufs
 # DUFS_SERVE_ROOT is the shared folder; DUFS_AUTH enables basic auth
 # (--allow-all gives upload/delete/write permissions to authenticated users)
 # serve-path is a POSITIONAL argument in dufs 0.47 (no --serve-path flag)
-ExecStart=/usr/local/dufs/bin/dufs --port ${DUFS_PORT} ${DUFS_AUTH} --allow-all ${DUFS_SERVE_ROOT}
+ExecStart=/usr/local/dufs/bin/dufs --port ${DUFS_PORT} --auth ${DUFS_AUTH_RULE} --allow-all ${DUFS_SERVE_ROOT}
 TimeoutStartSec=30
 TimeoutStopSec=10
 

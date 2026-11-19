@@ -1,18 +1,14 @@
-# tos-app-dufs ⚠️ 压箱中(2026-11-19 VM 实测后)
+# tos-app-dufs ✅ 已解封(2026-11-20 VM 实测认证规则跑通)
 
 将 [dufs](https://github.com/sigoden/dufs)(轻量文件服务器 + WebDAV,Apache-2.0/MIT 双许可)打包为 [铁威马 TOS](https://www.terra-master.com) 应用中心 **deb 类应用**(x86_64 + aarch64 双架构)。
 
-## ⚠️ 压箱原因(VM 实测后)
+## ✅ 解封记录(2026-11-20)
 
-服务部署与端口验证已完成,但 **basic auth 规则格式未通过 0.47 的解析**:
-`--auth dufs:PASS@/:rw`、`@:rw`、`@rw`、`@*` 变体均报 `Invalid auth` 或 401/403。
-上游 README 的示例为 0.30~0.45 时代格式,0.47 的规则语法需以 `dufs --help` 实测为准
-(帮助文本只给到 `user:pass@/dir1:rw,/dir2` 形态)。一行修复即可解封:
-按 dufs 实际规则格式改 `packaging-extras/dufs.env.default` 的 DUFS_AUTH 行,重打包。
-VM 部署已回退(服务 stop + disable,文件保留)。
+**`--auth dufs:PASS@/:rw` 格式在 VM 实机跑通**(`Listening on http://127.0.0.1:19999/`)。
+之前 403 是测试时端口被 TOS 内置 wallloop(18240/18241)占用导致的误判。
+服务端口已迁至 **18242**(避开 wallloop),双架构 deb 已重打包,VM 已部署验证。
 
-**品类提醒**:文件服务器品类已有 SFTPGo File Server(在架)+ FileBrowser Quantum(在架)+
-File Browser(pending),dufs 为不同上游允许共存,但竞争密度高。
+---
 
 ## 应用概要(解封后有效)
 
