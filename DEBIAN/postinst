@@ -29,6 +29,9 @@ DUFS_SERVE_ROOT=${SHARE}
 DUFS_AUTH=-a dufs:${AUTH}
 ENVEOF
     chmod 640 /etc/dufs/dufs.env
+    # TMACL (btrfs tmacl mount option) denies non-owner reads even with rwx ACL;
+    # the serve root must be owned by the dufs user (VM-verified)
+    chown -R dufs:dufs "${SHARE}" 2>/dev/null || true
     echo "dufs: web credential dufs:${AUTH}  share root: ${SHARE}"
 fi
 

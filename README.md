@@ -1,12 +1,12 @@
-# tos-app-dufs ✅ 已解封(2026-11-20 VM 实测认证规则跑通)
+# tos-app-dufs ✅ 已解封并 VM 验证(18242)(2026-11-20 VM 实测认证规则跑通)
 
 将 [dufs](https://github.com/sigoden/dufs)(轻量文件服务器 + WebDAV,Apache-2.0/MIT 双许可)打包为 [铁威马 TOS](https://www.terra-master.com) 应用中心 **deb 类应用**(x86_64 + aarch64 双架构)。
 
 ## ✅ 解封记录(2026-11-20)
 
-**`--auth dufs:PASS@/:rw` 格式在 VM 实机跑通**(`Listening on http://127.0.0.1:19999/`)。
-之前 403 是测试时端口被 TOS 内置 wallloop(18240/18241)占用导致的误判。
-服务端口已迁至 **18242**(避开 wallloop),双架构 deb 已重打包,VM 已部署验证。
+**VM 实测两坑均已修复:**
+1. `--auth dufs:PASS@/:rw,a` 格式正确(VM 实机 200,凭据拒绝时 401);
+2. serve root `/Volume1/public` 属主是 twmtest,btrfs `tmacl` 挂载选项拒绝 dufs 用户读——**postinst 已自动 chown 共享目录给 dufs 用户**。
 
 ---
 
