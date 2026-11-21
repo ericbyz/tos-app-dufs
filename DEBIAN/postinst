@@ -24,7 +24,7 @@ if [ ! -f /etc/dufs/dufs.env ]; then
     AUTH="$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 16)"
     [ -n "${AUTH}" ] || AUTH="dufs-$(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n')"
     cat > /etc/dufs/dufs.env <<ENVEOF
-DUFS_PORT=18240
+DUFS_PORT=18242
 DUFS_SERVE_ROOT=${SHARE}
 DUFS_AUTH=-a dufs:${AUTH}
 ENVEOF
@@ -48,5 +48,5 @@ case "$1" in
 esac
 
 echo "${APPID} installed successfully."
-echo "  web UI: http://<NAS>:18240 (basic auth dufs / <password in /etc/dufs/dufs.env>)"
+echo "  web UI: http://<NAS>:18242 (basic auth dufs / <password in /etc/dufs/dufs.env>)"
 exit 0
