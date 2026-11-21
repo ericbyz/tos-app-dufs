@@ -131,6 +131,11 @@ def main() -> int:
         missing = [l for l in LANG_BASELINE if f"[{l}]" not in content]
         if missing:
             advisories.append(f"{len(missing)} documented languages missing: {', '.join(missing)}")
+        if web_port is not None:
+            stale = re.findall(r":1[0-9]{4}", content)
+            wrong = [p for p in set(stale) if not p.endswith(str(web_port))]
+            if wrong:
+                err(f"{lang_path}: stale port refs {wrong} (expected :{web_port})")
         for section in re.split(r"\n(?=\[)", content):
             sm = re.match(r"\[([a-z-]+)\]", section)
             if not sm:
